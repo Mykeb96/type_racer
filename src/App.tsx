@@ -13,8 +13,7 @@ const initialGameState: gameState = {
   gameComplete: false
 };
 
-// const initialParagraph: string = `The quick brown fox wasn't just fast - it was clever. As it darted through the forest, leaves scattered beneath its paws. Each step echoed with purpose, every motion a blur of focus and grace. To chase it was to test your own limits.`;
-const initialParagraph: string = `The quick brown fox`;
+const initialParagraph: string = `The quick brown fox wasn't just fast - it was clever. As it darted through the forest, leaves scattered beneath its paws. Each step echoed with purpose, every motion a blur of focus and grace. To chase it was to test your own limits.`;
 
 function App() {
   const [gameState, setGameState] = useState<gameState>(initialGameState);
@@ -22,6 +21,7 @@ function App() {
   const [userInput, setUserInput] = useState<string>('');
   const [clock, setClock] = useState<number>(5);
   const timerRef = useRef<number | null>(null);
+  let wordCount = paragraph.trim().split(/\s+/).length;
 
   const handleInput = (event: any) => {
     setUserInput(event.target.value);
@@ -58,8 +58,10 @@ function App() {
           clearInterval(timerRef.current);
           timerRef.current = null;
         }
-        setGameState(initialGameState);
-        console.log(`Time taken: ${clock.toFixed(2)} seconds`);
+        setGameState({
+          roundStarted: false,
+          gameComplete: true
+        });
       }
     }
   }
@@ -71,6 +73,7 @@ function App() {
       timerRef.current = null;
     }
     setClock(5);
+    setGameState(initialGameState)
   }
 
   const startCountDown = () => {
@@ -133,11 +136,12 @@ function App() {
         :
           <div className="Placeholder" />
         }
-         {!gameState.roundStarted ? 
+         {!gameState.roundStarted && !gameState.gameComplete ? 
            <span className='Clock'>{clock}</span>
          :
-           <span className='Clock'>Timer: {clock.toFixed(2)}</span>
+           <span className='Clock'>Time: {clock.toFixed(2)}</span>
          }
+          {gameState.gameComplete && <span className="Words_Per_Minute">WPM: {Math.round((wordCount / clock) * 60)}</span>}
       </div>
     </div>
   )
