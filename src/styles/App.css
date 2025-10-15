@@ -12,11 +12,13 @@ p {
 
 #Container {
     width: 40%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .Paragraph_Container {
     width: 100%;
-    margin-bottom: 50px;
 }
 
 .Paragraph_Text {
@@ -31,4 +33,41 @@ p {
     width: 99%;
     height: 40px;
     font-size: 1.5rem;
+}
+
+.User_Input[readonly] {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.Start_Button {
+    align-self: center;
+    height: 40px;
+    width: 100px;
+}
+
+.Placeholder {
+    height: 40px;
+    width: 100px;
+    align-self: center;
+}
+
+.Clock {
+    align-self: center;
+    font-size: 1.5rem;
+}
+
+.char {
+    display: inline;
+}
+
+.char.correct {
+    background-color: #90EE90;
+    color: #2d5a2d;
+}
+
+.char.incorrect {
+    background-color: #FFB6C1;
+    color: #8B0000;
 }
