@@ -23,7 +23,7 @@ function App() {
   const timerRef = useRef<number | null>(null);
   let wordCount = paragraph.trim().split(/\s+/).length;
 
-  const handleInput = (event: any) => {
+  const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserInput(event.target.value);
   };
 
@@ -50,7 +50,7 @@ function App() {
     });
   };
 
-  const completeGame = (event: any) => {
+  const completeGame = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code == "Enter") {
       if (userInput === paragraph) {
         // stop timer
@@ -124,10 +124,10 @@ function App() {
         <div className="Input_Container">
           <input 
           readOnly={!gameState.roundStarted} 
-          onChange={(event: any) => handleInput(event)} 
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => handleInput(event)}
           type="text" 
           className="User_Input"
-          onKeyDown={(event: any) => completeGame(event)}
+          onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => completeGame(event)}
           value={userInput}
           />
         </div>
