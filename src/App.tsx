@@ -5,12 +5,12 @@ import { useState, useEffect, useRef } from 'react';
 
 interface gameState {
   roundStarted: boolean,
-  onTrack: boolean
+  gameComplete: boolean
 };
 
 const initialGameState: gameState = {
   roundStarted: false,
-  onTrack: false
+  gameComplete: false
 };
 
 // const initialParagraph: string = `The quick brown fox wasn't just fast - it was clever. As it darted through the forest, leaves scattered beneath its paws. Each step echoed with purpose, every motion a blur of focus and grace. To chase it was to test your own limits.`;
@@ -21,30 +21,10 @@ function App() {
   const [paragraph] = useState<string>(initialParagraph);
   const [userInput, setUserInput] = useState<string>('');
   const [clock, setClock] = useState<number>(5);
-  const [gameStartTime, setGameStartTime] = useState<number | null>(null);
   const timerRef = useRef<number | null>(null);
 
-  const handleInput = (e: any) => {
-    setUserInput(e.target.value);
-  };
-
-  const checkUserProgress = () => {
-    let paragraphSubStr = paragraph.substr(0, userInput.length);
-    if (userInput === paragraphSubStr && userInput != '') {
-      if (gameState.onTrack == false) {
-        setGameState({
-          roundStarted: true,
-          onTrack: true
-        });
-      }
-    } else {
-      if (gameState.onTrack == true) {
-        setGameState({
-          roundStarted: true,
-          onTrack: false
-        });
-      }
-    }
+  const handleInput = (event: any) => {
+    setUserInput(event.target.value);
   };
 
   const renderHighlightedText = () => {
@@ -70,8 +50,8 @@ function App() {
     });
   };
 
-  const completeGame = (e: any) => {
-    if (e.code == "Enter") {
+  const completeGame = (event: any) => {
+    if (event.code == "Enter") {
       if (userInput === paragraph) {
         // stop timer
         if (timerRef.current) {
@@ -79,36 +59,36 @@ function App() {
           timerRef.current = null;
         }
         setGameState(initialGameState);
-        const finalTime = (Date.now() - (gameStartTime || Date.now())) / 1000;
-        console.log('user completed the paragraph!');
-        console.log(`Time taken: ${finalTime.toFixed(2)} seconds`);
+        console.log(`Time taken: ${clock.toFixed(2)} seconds`);
       }
     }
   }
 
-  const startGame = () => {
-    // Reset everything
+  const resetGame = () => {
     setUserInput('');
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
     setClock(5);
-    
+  }
+
+  const startCountDown = () => {
     for (let i = 5; i > 0; i--) {
       setTimeout(() => {
         setClock(prevClock => prevClock - 1);
       }, (5 - i) * 1000);
     }
+  }
 
+  const startTimer = () => {
     setTimeout(() => {
       const startTime = Date.now();
-      setGameState({
-        roundStarted: true,
-        onTrack: false
-      });
-      setClock(0);
-      setGameStartTime(startTime);
+        setGameState({
+          roundStarted: true,
+          gameComplete: false,
+        });
+        setClock(0);
       
       // Update timer every 10ms
       timerRef.current = setInterval(() => {
@@ -118,11 +98,11 @@ function App() {
     }, 4000);
   }
 
-  useEffect(() => {
-    if (gameState.roundStarted) {
-     checkUserProgress();
-    }
-  }, [userInput])
+  const startGame = () => {
+    resetGame();
+    startCountDown();
+    startTimer();
+  }
 
   useEffect(() => {
     return () => {
@@ -141,10 +121,11 @@ function App() {
         <div className="Input_Container">
           <input 
           readOnly={!gameState.roundStarted} 
-          onChange={(e: any) => handleInput(e)} 
+          onChange={(event: any) => handleInput(event)} 
           type="text" 
           className="User_Input"
-          onKeyDown={(e: any) => completeGame(e)}
+          onKeyDown={(event: any) => completeGame(event)}
+          value={userInput}
           />
         </div>
         {!gameState.roundStarted ?
