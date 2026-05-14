@@ -2,6 +2,8 @@
 
 A typing speed game built with React and TypeScript. Match the passage with live feedback, a precise timer, and a WPM score when you finish.
 
+**Play it live:** [https://type-racer-game.vercel.app](https://type-racer-game.vercel.app) (hosted on Vercel.)
+
 ## Features
 
 - **Modern UI** — Dark theme, glass-style card, DM Sans + JetBrains Mono, and subtle accent glow aligned with the in-app look.
